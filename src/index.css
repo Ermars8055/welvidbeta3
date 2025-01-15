@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .nav-link {
+    @apply flex items-center space-x-1 text-gray-600 hover:text-blue-600 transition-colors;
+  }
+  .theme-button {
+    @apply flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-300 transition-colors;
+  }
+  .theme-dropdown {
+    @apply absolute top-full mt-2 right-0 bg-white shadow-lg rounded-lg w-40 py-2;
+  }
+  .theme-item {
+    @apply block w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors;
+  }
+}
+
+/* styles.css */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+body.light, .home-container.light {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+body.colorful, .home-container.colorful {
+  --bg-color: #ffeb3b;
+  --text-color: #1a202c;
+}
+
+body, .home-container {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+

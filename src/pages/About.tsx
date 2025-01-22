@@ -6,8 +6,8 @@ const About = () => {
     <div className="pt-20 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">About SocialHub</h1>
-          <p className="text-xl text-gray-600">Connecting people, sharing moments, creating memories.</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">About Welvid </h1>
+          <p className="text-xl text-gray-600">Elevate every aspect of your life with our exclusive platform</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -31,7 +31,7 @@ const About = () => {
         <div className="bg-white rounded-xl shadow-sm p-8 mb-16">
           <h2 className="text-2xl font-bold mb-4">Our Story</h2>
           <p className="text-gray-600 mb-4">
-            Founded in 2024, SocialHub was created with a simple mission: to bring people closer together. We believe in the power of shared experiences and authentic connections.
+            Founded in 2025, Welvid  was created with a simple mission: to bring people closer together. We believe in the power of shared experiences and authentic connections.
           </p>
           <p className="text-gray-600">
             Today, we're proud to serve millions of users worldwide, providing a platform where everyone can share their stories, connect with like-minded individuals, and build meaningful relationships.

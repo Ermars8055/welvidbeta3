@@ -17,25 +17,26 @@
   }
 }
 
-/* styles.css */
-:root {
+body.light {
   --bg-color: #ffffff;
   --text-color: #000000;
 }
 
-body.light, .home-container.light {
-  --bg-color: #ffffff;
-  --text-color: #000000;
+body.dark {
+  --bg-color: #1a202c;
+  --text-color: #f7fafc;
 }
 
-body.colorful, .home-container.colorful {
-  --bg-color: #ffeb3b;
-  --text-color: #1a202c;
+/* Navbar-Specific Themes */
+.nav-link {
+  color: var(--text-color);
+}
+.navbar {
+  background-color: var(--bg-color);
 }
 
-body, .home-container {
+/* Input Box Themes */
+input {
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s;
 }
-

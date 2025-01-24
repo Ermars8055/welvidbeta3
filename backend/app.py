@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Your YouTube API key
-API_KEY = 'AIzaSyCak2ehBKtpDjT_FWnkFtSV5OBRHeeYhzM'
+API_KEY = 'AIzaSyAAyzsKJPZwfdgfw49zoMWdciWn4yMwAJw'
 YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/search'
 
 # Home route

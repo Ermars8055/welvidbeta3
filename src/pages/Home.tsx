@@ -120,7 +120,7 @@ const Home: React.FC = () => {
       setLoadingReels(true);
       setReelsError(null);
   
-      fetch('https://welvidbeta3-1.onrender.com') // Correct URL
+      fetch('https://welvidbeta3-1.onrender.com/youtube-search?q=football') // Correct URL
         .then((response) => {
           if (!response.ok) {
             console.error('HTTP error', response.status);

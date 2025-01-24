@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const YOUTUBE_API_KEY = 'AIzaSyCak2ehBKtpDjT_FWnkFtSV5OBRHeeYhzM';
+const BACKEND_URL = 'https://your-backend-service.onrender.com'; // Replace with your actual backend URL
 
 interface Tweet {
   id: number;
@@ -119,8 +119,8 @@ const Home: React.FC = () => {
     if (view === 'reels') {
       setLoadingReels(true);
       setReelsError(null);
-
-      fetch(`http://localhost:5000/youtube-search?q=football,math`)
+  
+      fetch('https://welvidbeta3-1.onrender.com/api/reels') // Correct URL
         .then((response) => {
           if (!response.ok) {
             console.error('HTTP error', response.status);
@@ -130,19 +130,30 @@ const Home: React.FC = () => {
         })
         .then((data) => {
           console.log('API response:', data); // Debugging
-
-          // Filter videos that contain "football" or "math" in the title or description
-          const filteredVideos = data.items?.filter((item: any) => {
-            const title = item.snippet.title.toLowerCase();
-            const description = item.snippet.description.toLowerCase();
-            return title.includes('football') || title.includes('math') || description.includes('football') || description.includes('math');
-          }).map((item: any) => ({
-            id: item.id.videoId,
-            title: item.snippet.title,
-            thumbnail: item.snippet.thumbnails.high.url,
-          }));
-
-          setReelsData(filteredVideos || []);
+  
+          if (data.items) {
+            // Filter videos based on the title or description
+            const filteredVideos = data.items
+              .filter((item: any) => {
+                const title = item.snippet?.title?.toLowerCase();
+                const description = item.snippet?.description?.toLowerCase();
+                return (
+                  title?.includes('football') ||
+                  title?.includes('math') ||
+                  description?.includes('football') ||
+                  description?.includes('math')
+                );
+              })
+              .map((item: any) => ({
+                id: item.id.videoId,
+                title: item.snippet.title,
+                thumbnail: item.snippet.thumbnails.high.url,
+              }));
+  
+            setReelsData(filteredVideos || []);
+          } else {
+            setReelsError('No reels found or unexpected API response format.');
+          }
         })
         .catch((error) => {
           console.error('Error fetching reels:', error);
@@ -151,7 +162,6 @@ const Home: React.FC = () => {
         .finally(() => setLoadingReels(false));
     }
   }, [view]);
-  
   
 
   return (
@@ -246,42 +256,50 @@ const Home: React.FC = () => {
                             placeholder="Write a reply"
                             value={newReply[comment.id] || ''}
                             onChange={(e) =>
-                              setNewReply({ ...newReply, [comment.id]: e.target.value })
+                              setNewReply((prev) => ({
+                                ...prev,
+                                [comment.id]: e.target.value,
+                              }))
                             }
-                            className="p-2 rounded-md border border-gray-300"
+                            className="px-4 py-2 border rounded"
                           />
                           <button
                             onClick={() => handleAddReply(tweet.id, comment.id)}
-                            className="bg-blue-500 text-white p-2 rounded-md"
+                            className="px-4 py-2 bg-blue-500 text-white rounded"
                           >
-                            Post
+                            Post Reply
                           </button>
                         </div>
                       )}
-                      <div className="mt-2 space-y-2">
-                        {comment.replies.map((reply) => (
-                          <div key={reply.id} className="ml-6">
-                            <p>{reply.text}</p>
-                          </div>
-                        ))}
-                      </div>
+                      {comment.replies.length > 0 && (
+                        <div className="ml-6 mt-2 space-y-2">
+                          {comment.replies.map((reply) => (
+                            <p key={reply.id} className="text-gray-500">
+                              {reply.text}
+                            </p>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
-                  <div className="mt-4 flex space-x-2">
+                  <div className="mt-4">
                     <input
                       type="text"
-                      placeholder="Add a comment..."
+                      placeholder="Add a comment"
                       value={newComment[tweet.id] || ''}
                       onChange={(e) =>
-                        setNewComment({ ...newComment, [tweet.id]: e.target.value })
+                        setNewComment((prev) => ({
+                          ...prev,
+                          [tweet.id]: e.target.value,
+                        }))
                       }
-                      className="p-2 rounded-md border border-gray-300 flex-grow"
+                      className="px-4 py-2 border rounded"
                     />
                     <button
                       onClick={() => handleAddComment(tweet.id)}
-                      className="bg-blue-500 text-white p-2 rounded-md"
+                      className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
                     >
-                      Post
+                      Post Comment
                     </button>
                   </div>
                 </div>
@@ -290,38 +308,28 @@ const Home: React.FC = () => {
           ))}
 
         {view === 'reels' && loadingReels && (
-          <div className="text-center">Loading reels...</div>
+          <div className="text-center py-6">Loading reels...</div>
         )}
 
         {view === 'reels' && reelsError && (
-          <div className="text-center text-red-500">{reelsError}</div>
+          <div className="text-center py-6 text-red-500">{reelsError}</div>
         )}
 
-{view === 'reels' && reelsError && (
-          <div className="text-center text-red-500">{reelsError}</div>
-        )}
-
-        {view === 'reels' && !loadingReels && !reelsError && (
+        {view === 'reels' && !loadingReels && !reelsError && reelsData.length > 0 && (
           <div className="space-y-6">
-            {reelsData.map((video) => {
-              const videoId = video.id;
-              const videoUrl = `https://www.youtube.com/embed/${videoId}`;
-              return (
-                <div key={videoId} className="bg-white rounded-xl shadow-sm p-6">
-                  <h3 className="font-semibold">{video.title}</h3>
-                  <iframe
-                    width="100%"
-                    height="315"
-                    src={videoUrl}
-                    title={video.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
+            {reelsData.map((video) => (
+              <div key={video.id} className="bg-white rounded-xl shadow-sm p-6">
+                <div className="flex justify-center">
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="rounded-lg"
+                    style={{ maxWidth: '100%' }}
                   />
                 </div>
-              );
-            })}
+                <h3 className="mt-4 text-xl font-semibold">{video.title}</h3>
+              </div>
+            ))}
           </div>
         )}
       </div>
